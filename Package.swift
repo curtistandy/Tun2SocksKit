@@ -4,17 +4,21 @@ import PackageDescription
 
 let package = Package(
   name: "Tun2SocksKit",
-  platforms: [.iOS(.v12), .macOS(.v12), .macCatalyst(.v13)],
+  platforms: [.iOS(.v12), .macOS(.v12)],
   products: [
     .library(
         name: "Tun2SocksKit",
         targets: ["Tun2SocksKit"]
+    ),
+    .library(
+        name: "Tun2SocksKitC",
+        targets: ["Tun2SocksKitC"]
     )
   ],
   targets: [
     .target(
         name: "Tun2SocksKit",
-        dependencies: ["Tun2SocksKitC", "HevSocks5Tunnel"]
+        dependencies: ["HevSocks5Tunnel", "Tun2SocksKitC"]
     ),
     .target(
         name: "Tun2SocksKitC",
@@ -22,8 +26,8 @@ let package = Package(
     ),
     .binaryTarget(
         name: "HevSocks5Tunnel",
-        url: "https://github.com/shoumo680/Tun2SocksKit/releases/download/2.5.3/HevSocks5Tunnel.xcframework.zip",
-        checksum: "0a7c582a82b2a8b621cfb9ccde7bb8d61e59c43f36ae52f7258ad2417b607d1e"
+        url: "https://github.com/EbrahimTahernejad/Tun2SocksKit/releases/download/3.6.4/HevSocks5Tunnel.xcframework.zip",
+        checksum: "f06625da073e5e146309087dbb7cc5258a6149584719d4108b480796844b8646"
     )
   ]
 )
