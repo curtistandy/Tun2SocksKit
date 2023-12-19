@@ -3,7 +3,7 @@ import Tun2SocksKitC
 import HevSocks5Tunnel
 
 public enum Socks5Tunnel {
-    
+
     private static var tunnelFileDescriptor: Int32? {
         var ctlInfo = ctl_info()
         withUnsafeMutablePointer(to: &ctlInfo.ctl_name) {
@@ -36,35 +36,20 @@ public enum Socks5Tunnel {
         return nil
     }
     
-    private static var interfaceName: String? {
-        guard let tunnelFileDescriptor = self.tunnelFileDescriptor else {
-            return nil
+    public static func run(withConfig filePath: String, completionHandler: @escaping (Int32) -> ()) {
+        guard let fileDescriptor = tunnelFileDescriptor else {
+            completionHandler(-1)
+            return
         }
-        var buffer = [UInt8](repeating: 0, count: Int(IFNAMSIZ))
-        return buffer.withUnsafeMutableBufferPointer { mutableBufferPointer in
-            guard let baseAddress = mutableBufferPointer.baseAddress else {
-                return nil
-            }
-            var ifnameSize = socklen_t(IFNAMSIZ)
-            let result = getsockopt(
-                tunnelFileDescriptor,
-                2 /* SYSPROTO_CONTROL */,
-                2 /* UTUN_OPT_IFNAME */,
-                baseAddress,
-                &ifnameSize
-            )
-            if result == 0 {
-                return String(cString: baseAddress)
-            } else {
-                return nil
-            }
+        DispatchQueue.global(qos: .userInitiated).async { [completionHandler] () in
+            let code = hev_socks5_tunnel_main(filePath.cString(using: .utf8), fileDescriptor)
+            completionHandler(code)
         }
     }
-    
-    @discardableResult
+
     public static func run(withConfig filePath: String) -> Int32 {
-        guard let fileDescriptor = self.tunnelFileDescriptor else {
-            fatalError("Get tunnel file descriptor failed.")
+        guard let fileDescriptor = tunnelFileDescriptor else {
+            return -1
         }
         return hev_socks5_tunnel_main(filePath.cString(using: .utf8), fileDescriptor)
     }

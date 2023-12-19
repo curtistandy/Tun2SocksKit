@@ -1,35 +1,22 @@
 # Tun2SocksKit
 
-[![Downloads][0]][1]
-
-[0]: https://img.shields.io/github/downloads/arror/Tun2SocksKit/total.svg
-[1]: https://github.com/arror/Tun2SocksKit/releases/latest
-
-⚠️⚠️⚠️不保证每个版本都可用，请自行[Fork](https://github.com/daemooon/Tun2SocksKit/fork)发布⚠️⚠️⚠️
-
-### 重要变更
-
-> `2.4.0` 支持maccatalyst（arm64、x86_64）by [@hossinasaadi](https://github.com/hossinasaadi)
-
-> `2.2.1` 支持macOS（arm64、x86_64）
-
-> ~~`2.2.0` 支持macOS（arm64、x86_64）~~
-
-> `2.1.16` 支持iPhone模拟器，[hev-socks5-tunnel-iphonesimulator](https://github.com/daemooon/hev-socks5-tunnel-iphonesimulator)实现
-
-> ~~`2.1.10` 支持arm64的模拟器~~
-
-> `2.0.1` 使用[hev-socks5-tunnel](https://github.com/heiher/hev-socks5-tunnel)替换[leaf](https://github.com/eycorsican/leaf)实现
 
 
-### 使用
+This repository is a wrapper and a build workflow for [hev-socks5-tunnel](https://github.com/heiher/hev-socks5-tunnel)
+
+
+### Usage
 ```swift
 import Tun2SocksKit
 
-Socks5Tunnel.run(withFileDescriptor: 4, configFilePath: localConfigFileURL.path(percentEncoded: false))
+let code = Socks5Tunnel.run(withConfig: localConfigFileURL.path(percentEncoded: false))
+// or
+Socks5Tunnel.run(withConfig: localConfigFileURL.path(percentEncoded: false)) { code in
+    // ...
+}
 ```
 
-### 配置文件（详见[hev-socks5-tunnel](https://github.com/heiher/hev-socks5-tunnel)）
+### Config
 ```yml
 tunnel:
   mtu: 9000
